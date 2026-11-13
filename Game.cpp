@@ -198,10 +198,11 @@ void bank(int& balance, int& debt, int& time, int& percent) {
 
 				errInput();
 				repayment = 0;
-
+				
 			}
 
 			debt -= repayment;
+			balance -= repayment;
 			backToMenu();
 			break;
 		case 3:
