@@ -201,7 +201,7 @@ void bank(int& balance, int& debt, int& percent) {
 				repayment = 0;
 				break;
 			}
-			repay(repayment, debt, percent);
+			repay(repayment, debt, percent, balance);
 
 			backToMenu();
 			break;
