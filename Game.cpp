@@ -128,32 +128,25 @@ void playGame(int& balance) {
 
 	std::cout << "═══════════════════════════\n\n";
 	// Исходы
-	win = bet * 2;
+	int change = 0;   // на сколько изменится баланс: минус, ноль или плюс
 
 	if (sumCard > 21) {
-
 		std::cout << "У вас " << sumCard << " очков\nПеребор. Вы проиграли\n";
-		balance -= bet;
-		std::cout << "Ваш баланс: " << balance << "\n";
-
+		change = -bet;
 	}
 	else if (sumDealer > 21) {
-
 		std::cout << "У дилера перебор. Вы выиграли\n";
-		std::cout << "Ваш баланс: " << balance;
-
-
+		change = bet;
 	}
 	else {
-
 		int state = (sumCard > sumDealer) - (sumDealer > sumCard) + 1;
-		balance += (state - 1) * bet;
+		change = (state - 1) * bet;
 		std::cout << "Ваши очки: " << sumCard << ".\nОчки дилера: " << sumDealer << "\n";
 		std::cout << mes[state] << "\n";
-		std::cout << "Ваш баланс: " << balance;
-
-
 	}
+
+	balance += change;
+	std::cout << "Ваш баланс: " << balance << "\n";
 
 	backToMenu();
 
@@ -184,7 +177,6 @@ void bank(int& balance, int& debt, int& percent) {
 			}
 
 			debt += takeDebt;
-			std::cout << "\nВерните сумму кредита в течении " << (debt / 2) << "\nИначе вас достанут где угодно\n";
 			balance += takeDebt;
 			backToMenu();
 			break;

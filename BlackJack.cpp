@@ -41,7 +41,7 @@ int main() {
 
 			case 1:
 				//Начисление процентов
-				percent = static_cast<int>(std::ceil(debt * 0.01));
+				percent += static_cast<int>(std::ceil(debt * 0.01));
 				//Сама игра
 				playGame(balance);
 
