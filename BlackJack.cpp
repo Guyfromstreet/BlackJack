@@ -24,6 +24,8 @@ int main() {
 	int debt = 0;
 	int time = 0;
 	int percent = 0;
+	int debtTime = 0;
+	int penalty = 0;
 	Credits();
 	do {
 		//Меню игры
@@ -41,11 +43,21 @@ int main() {
 			switch (choice) {
 
 			case 1:
-				playGame(balance,time,debt);
+				//Начисление процентов и пени
+				if (debtTime > time) {
+
+					penalty = (debt + percent) * 0.01;
+
+				}
+
+				percent = debt * 0.12;
+				//Сама игра
+				playGame(balance, debtTime, debt, penalty);
+
 				break;
 
 			case 2:
-				bank(balance, debt, time, percent);
+				bank(balance, debt, time, percent, debtTime);
 				break;
 
 			case 3:

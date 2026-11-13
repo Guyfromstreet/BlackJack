@@ -5,7 +5,7 @@
 #include "Card.h"
 #include "Deck.h"
 
-void playGame(int& balance, int& debtTime, int& debt) {
+void playGame(int& balance, int& debtTime, int& debt, int& penalty) {
 	//Переменные
 	int bet = 0;
 	int NumCards = 0;
@@ -24,7 +24,7 @@ void playGame(int& balance, int& debtTime, int& debt) {
 		"Вы выиграли"
 
 	};
-
+	//Счётчик дней задолженности
 	if (debt != 0) {
 		debtTime++;
 	}
@@ -157,6 +157,15 @@ void playGame(int& balance, int& debtTime, int& debt) {
 
 	}
 
+	//Конфискация части заработанного
+	if (penalty != 0) {
+
+		
+		std::cout << "Часть вашего заработка конфискуется в счёт задолженности.";
+
+
+	}
+
 
 	backToMenu();
 
@@ -169,7 +178,6 @@ void bank(int& balance, int& debt, int& time, int& percent, int& debtTime) {
 	int repayment = 0;
 	int penalty = 0;
 
-	percent = debt * 0.12;
 	std::cout << "Добро пожаловать в банк\n";
 
 	if (debtTime > time) {
@@ -185,10 +193,10 @@ void bank(int& balance, int& debt, int& time, int& percent, int& debtTime) {
 
 		case 1: 
 
-			std::cout << "Введите сумму кредит (10-1000): ";
+			std::cout << "Введите сумму кредит (100-10000): ";
 			std::cin >> takeDebt;
 
-			if (std::cin.fail() || takeDebt < 10 || takeDebt > 1000) {
+			if (std::cin.fail() || takeDebt < 100 || takeDebt > 10000) {
 
 				errInput();
 				takeDebt = 0;
@@ -225,7 +233,7 @@ void bank(int& balance, int& debt, int& time, int& percent, int& debtTime) {
 
 			}
 
-			if (debt + percent = 0) {
+			if (percent = 0) {
 				debtTime = 0;
 			}
 
