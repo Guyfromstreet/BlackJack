@@ -41,7 +41,6 @@ int main() {
 			switch (choice) {
 
 			case 1:
-				percent += debt / 10;
 				playGame(balance,time,debt);
 				break;
 

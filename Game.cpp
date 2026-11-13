@@ -5,7 +5,7 @@
 #include "Card.h"
 #include "Deck.h"
 
-void playGame(int& balance, int& deptTime, int& debt) {
+void playGame(int& balance, int& debtTime, int& debt) {
 	//Переменные
 	int bet = 0;
 	int NumCards = 0;
@@ -26,7 +26,7 @@ void playGame(int& balance, int& deptTime, int& debt) {
 	};
 
 	if (debt != 0) {
-		deptTime++;
+		debtTime++;
 	}
 
 	std::cout << "\n\n\n| Начало Игры |\n";
@@ -163,11 +163,22 @@ void playGame(int& balance, int& deptTime, int& debt) {
 }
 
 
-void bank(int& balance, int& debt, int& time, int& percent) {
+void bank(int& balance, int& debt, int& time, int& percent, int& debtTime) {
 	int choice = 0;
 	int takeDebt = 0;
 	int repayment = 0;
+	int penalty = 0;
+
+	percent = debt * 0.12;
 	std::cout << "Добро пожаловать в банк\n";
+
+	if (debtTime > time) {
+		penalty = (debt + percent) * 0.01;
+		std::cout << "У вас просроченный платёж.\nНачисленно: " << penalty;
+		percent += penalty;
+
+	}
+
 	std::cout << "1. Взять кредит\n2. Отдать долг\n 3.Уйти\n";
 	std::cin >> choice;
 	switch (choice) {
@@ -176,12 +187,14 @@ void bank(int& balance, int& debt, int& time, int& percent) {
 
 			std::cout << "Введите сумму кредит (10-1000): ";
 			std::cin >> takeDebt;
+
 			if (std::cin.fail() || takeDebt < 10 || takeDebt > 1000) {
 
 				errInput();
 				takeDebt = 0;
 				break;
 			}
+
 			debt += takeDebt;
 			time = debt / 2;
 			std::cout << "\nВерните сумму кредита в течении " << (debt / 2) << "\nИначе вас достанут где угодно\n";
@@ -194,15 +207,28 @@ void bank(int& balance, int& debt, int& time, int& percent) {
 			std::cout << "К возврату " << debt + percent;
 			std::cout << "Введите сумму погашения: ";
 			std::cin >> repayment;
-			if (std::cin.fail() || repayment < 1 || repayment > debt + percent) {
+
+			if (std::cin.fail() || repayment < 1 || repayment > debt + percent || repayment > balance) {
 
 				errInput();
 				repayment = 0;
-				
+				break;
 			}
 
 			debt -= repayment;
 			balance -= repayment;
+
+			if (debt < 0) {
+
+				percent += debt;
+				debt = 0;
+
+			}
+
+			if (debt + percent = 0) {
+				debtTime = 0;
+			}
+
 			backToMenu();
 			break;
 		case 3:
