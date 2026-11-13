@@ -4,7 +4,7 @@
 #include <algorithm>
 
 //Создание колоды
-void GenerateDeck(Card deck[], int DECK_SIZE) {
+void GenerateDeck(Card deck[]) {
 
 	int deckIndex = 0;
 
@@ -23,7 +23,7 @@ void GenerateDeck(Card deck[], int DECK_SIZE) {
 }
 
 	//Перемешивание карт
-	void ShuffleDeck(Card deck[], int DECK_SIZE) {
+	void ShuffleDeck(Card deck[]) {
 
 		std::random_device seed;
 		std::mt19937 rng(seed());

@@ -2,11 +2,11 @@
 #include "UI.h"
 #include "Card.h"
 #include "Deck.h"
+#include "Game.h"
 
 void playGame(int& balance) {
 	//Переменные
 	int bet = 0;
-	int NumCards = 0;
 	int sumDealer = 0;
 	int sumCard = 0;
 	int cardIndex = 0;
@@ -22,9 +22,9 @@ void playGame(int& balance) {
 	};
 
 	std::cout << "\n\n\n| Начало Игры |\n";
-	Card deck[52];
-	GenerateDeck(deck, 52);
-	ShuffleDeck(deck, 52);
+	Card deck[DECK_SIZE];
+	GenerateDeck(deck);
+	ShuffleDeck(deck);
 	Card currentCard = deck[cardIndex];
 
 	//Ставка
@@ -37,7 +37,9 @@ void playGame(int& balance) {
 			errInput();
 			bet = 0;
 		}
-		std::cout << "\nСтавка принята\n\n\n";
+		else {
+			std::cout << "\nСтавка принята\n\n\n";
+		}
 	}
 
 	//Раздача
@@ -91,7 +93,6 @@ void playGame(int& balance) {
 			std::cout << currentCard.rank << " " << currentCard.suit << "\n" << currentCard.value << "\n\n";
 			sumCard += currentCard.value;
 			cardIndex++;
-			NumCards++;
 			if (currentCard.rank == "Туз") {
 				aceCount++;
 			}
@@ -144,8 +145,9 @@ void playGame(int& balance) {
 }
 
 
-void repay(int amount, int& debt, int& percent) {
+void repay(int amount, int& debt, int& percent, int& balance) {
 
+	balance -= amount;
 	debt -= amount;
 	if (debt < 0) {
 		percent += debt;
@@ -160,17 +162,18 @@ void bank(int& balance, int& debt, int& percent) {
 	int takeDebt = 0;
 	int repayment = 0;
 
-	std::cout << "Добро пожаловать в банк\n";
+	do {
 
-	std::cout << "1. Взять кредит\n2. Отдать долг\n 3.Уйти\n";
-	std::cin >> choice;
-	switch (choice) {
+		std::cout << "Добро пожаловать в банк\n";
+		std::cout << "Баланс: " << balance << " | Долг: " << debt << " | Проценты: " << percent << "\n";
+		std::cout << "1. Взять кредит\n2. Отдать долг\n 3.Уйти\n";
+		std::cin >> choice;
+		switch (choice) {
 
-		case 1: 
+		case 1:
 
 			std::cout << "Введите сумму кредит (100-10000): ";
 			std::cin >> takeDebt;
-			std::cout << "\nКредит взят\n";
 
 			if (std::cin.fail() || takeDebt < 100 || takeDebt > 10000) {
 
@@ -181,10 +184,11 @@ void bank(int& balance, int& debt, int& percent) {
 
 			debt += takeDebt;
 			balance += takeDebt;
+			std::cout << "\nКредит взят\n";
 			backToMenu();
 			break;
-		
-		case 2: 
+
+		case 2:
 
 			std::cout << "К возврату " << debt + percent;
 			std::cout << "\nВведите сумму погашения: ";
@@ -197,17 +201,18 @@ void bank(int& balance, int& debt, int& percent) {
 				repayment = 0;
 				break;
 			}
+			repay(repayment, debt, percent);
 
 			backToMenu();
 			break;
 		case 3:
 
 			break;
-		
+
 		default:
 
 			errInput();
 
-	}
-
+		}
+	} while (choice != 3);
 }

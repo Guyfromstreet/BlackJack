@@ -3,8 +3,8 @@
 #include <chrono>
 #include <thread>
 #include <cmath>
-#include "UI.h"
 #include "Game.h"
+#include "UI.h"
 #define NOMINMAX
 #ifdef _WIN32
 #include <Windows.h>
