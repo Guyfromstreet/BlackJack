@@ -5,7 +5,7 @@
 #include "Card.h"
 #include "Deck.h"
 
-void playGame(int& balance, int& debtTime, int& debt, int& penalty) {
+void playGame(int& balance) {
 	//Переменные
 	int bet = 0;
 	int NumCards = 0;
@@ -17,6 +17,7 @@ void playGame(int& balance, int& debtTime, int& debt, int& penalty) {
 	int pickCard = 1; //1 - брать, 2 - пас
 	int aceCount = 0;
 	int aceCountDealer = 0;
+	int win = 0;
 
 	std::string mes[] = {
 		"Вы проиграли",
@@ -24,10 +25,6 @@ void playGame(int& balance, int& debtTime, int& debt, int& penalty) {
 		"Вы выиграли"
 
 	};
-	//Счётчик дней задолженности
-	if (debt != 0) {
-		debtTime++;
-	}
 
 	std::cout << "\n\n\n| Начало Игры |\n";
 	Card deck[52];
@@ -130,6 +127,8 @@ void playGame(int& balance, int& debtTime, int& debt, int& penalty) {
 	}
 
 	std::cout << "═══════════════════════════\n\n";
+	// Исходы
+	win = bet * 2;
 
 	if (sumCard > 21) {
 
@@ -141,7 +140,6 @@ void playGame(int& balance, int& debtTime, int& debt, int& penalty) {
 	else if (sumDealer > 21) {
 
 		std::cout << "У дилера перебор. Вы выиграли\n";
-		balance += bet;
 		std::cout << "Ваш баланс: " << balance;
 
 
@@ -157,35 +155,17 @@ void playGame(int& balance, int& debtTime, int& debt, int& penalty) {
 
 	}
 
-	//Конфискация части заработанного
-	if (penalty != 0) {
-
-		
-		std::cout << "Часть вашего заработка конфискуется в счёт задолженности.";
-
-
-	}
-
-
 	backToMenu();
 
 }
 
 
-void bank(int& balance, int& debt, int& time, int& percent, int& debtTime) {
+void bank(int& balance, int& debt, int& percent) {
 	int choice = 0;
 	int takeDebt = 0;
 	int repayment = 0;
-	int penalty = 0;
 
 	std::cout << "Добро пожаловать в банк\n";
-
-	if (debtTime > time) {
-		penalty = (debt + percent) * 0.01;
-		std::cout << "У вас просроченный платёж.\nНачисленно: " << penalty;
-		percent += penalty;
-
-	}
 
 	std::cout << "1. Взять кредит\n2. Отдать долг\n 3.Уйти\n";
 	std::cin >> choice;
@@ -204,7 +184,6 @@ void bank(int& balance, int& debt, int& time, int& percent, int& debtTime) {
 			}
 
 			debt += takeDebt;
-			time = debt / 2;
 			std::cout << "\nВерните сумму кредита в течении " << (debt / 2) << "\nИначе вас достанут где угодно\n";
 			balance += takeDebt;
 			backToMenu();
@@ -232,11 +211,6 @@ void bank(int& balance, int& debt, int& time, int& percent, int& debtTime) {
 				debt = 0;
 
 			}
-
-			if (percent = 0) {
-				debtTime = 0;
-			}
-
 			backToMenu();
 			break;
 		case 3:
