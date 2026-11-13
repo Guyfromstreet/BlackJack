@@ -1,6 +1,4 @@
 #include <iostream>
-#include <chrono>
-#include <thread>
 #include "UI.h"
 #include "Card.h"
 #include "Deck.h"
@@ -10,14 +8,11 @@ void playGame(int& balance) {
 	int bet = 0;
 	int NumCards = 0;
 	int sumDealer = 0;
-	int valDealer = 0;
-	int valCard = 0;
 	int sumCard = 0;
 	int cardIndex = 0;
 	int pickCard = 1; //1 - брать, 2 - пас
 	int aceCount = 0;
 	int aceCountDealer = 0;
-	int win = 0;
 
 	std::string mes[] = {
 		"Вы проиграли",
@@ -38,11 +33,11 @@ void playGame(int& balance) {
 
 		std::cout << "Введите свою ставку: ";
 		std::cin >> bet;
-		std::cout << "\nСтавка принята";
 		if (std::cin.fail() || bet > balance || bet < 1) {
 			errInput();
 			bet = 0;
 		}
+		std::cout << "\nСтавка принята\n\n\n";
 	}
 
 	//Раздача
@@ -54,8 +49,7 @@ void playGame(int& balance) {
 		currentCard = deck[cardIndex];
 		cardIndex++;
 		std::cout << currentCard.rank << " " << currentCard.suit << "\n" << currentCard.value << "\n\n";
-		valCard = currentCard.value;
-		sumCard = sumCard + valCard;
+		sumCard += currentCard.value;;
 		if (currentCard.rank == "Туз") {
 			aceCount++;
 		}
@@ -67,8 +61,7 @@ void playGame(int& balance) {
 		//Дилеру
 		currentCard = deck[cardIndex];
 		cardIndex++;
-		valDealer = currentCard.value;
-		sumDealer = sumDealer + valDealer;
+		sumDealer += currentCard.value;
 		if (currentCard.rank == "Туз") {
 			aceCountDealer++;
 		}
@@ -96,8 +89,7 @@ void playGame(int& balance) {
 			std::cout << "\n---Получена карта---\n";
 			currentCard = deck[cardIndex];
 			std::cout << currentCard.rank << " " << currentCard.suit << "\n" << currentCard.value << "\n\n";
-			valCard = currentCard.value;
-			sumCard = sumCard + valCard;
+			sumCard += currentCard.value;
 			cardIndex++;
 			NumCards++;
 			if (currentCard.rank == "Туз") {
@@ -114,8 +106,7 @@ void playGame(int& balance) {
 	while (sumDealer < 17 && sumCard <= 21) {
 
 		currentCard = deck[cardIndex];
-		valDealer = currentCard.value;
-		sumDealer = sumDealer + valDealer;
+		sumDealer += currentCard.value;
 		cardIndex++;
 		if (currentCard.rank == "Туз") {
 			aceCountDealer++;
@@ -153,6 +144,17 @@ void playGame(int& balance) {
 }
 
 
+void repay(int amount, int& debt, int& percent) {
+
+	debt -= amount;
+	if (debt < 0) {
+		percent += debt;
+		debt = 0;
+
+	}
+}
+
+
 void bank(int& balance, int& debt, int& percent) {
 	int choice = 0;
 	int takeDebt = 0;
@@ -168,6 +170,7 @@ void bank(int& balance, int& debt, int& percent) {
 
 			std::cout << "Введите сумму кредит (100-10000): ";
 			std::cin >> takeDebt;
+			std::cout << "\nКредит взят\n";
 
 			if (std::cin.fail() || takeDebt < 100 || takeDebt > 10000) {
 
@@ -184,8 +187,9 @@ void bank(int& balance, int& debt, int& percent) {
 		case 2: 
 
 			std::cout << "К возврату " << debt + percent;
-			std::cout << "Введите сумму погашения: ";
+			std::cout << "\nВведите сумму погашения: ";
 			std::cin >> repayment;
+			std::cout << "\n";
 
 			if (std::cin.fail() || repayment < 1 || repayment > debt + percent || repayment > balance) {
 
@@ -194,15 +198,6 @@ void bank(int& balance, int& debt, int& percent) {
 				break;
 			}
 
-			debt -= repayment;
-			balance -= repayment;
-
-			if (debt < 0) {
-
-				percent += debt;
-				debt = 0;
-
-			}
 			backToMenu();
 			break;
 		case 3:

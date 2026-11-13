@@ -2,8 +2,7 @@
 #include <fstream>
 #include <chrono>
 #include <thread>
-#include "Card.h"
-#include "Deck.h"
+#include <cmath>
 #include "UI.h"
 #include "Game.h"
 #define NOMINMAX
@@ -65,8 +64,7 @@ int main() {
 
 				std::cout << "Завершение работы программы. Ожидайте...\n\n";
 				std::this_thread::sleep_for(std::chrono::seconds(2));
-				return 0;
-
+				break;
 			default: {
 
 				errInput();

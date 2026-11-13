@@ -1,5 +1,5 @@
 #pragma once
 #include "Card.h"
-
-void GenerateDeck(Card deck[], int size);
-void ShuffleDeck(Card deck[], int size);
+constexpr int DECK_SIZE = 52;
+void GenerateDeck(Card deck[], int DECK_SIZE);
+void ShuffleDeck(Card deck[], int DECK_SIZE);
