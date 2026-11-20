@@ -8,3 +8,10 @@ struct Card {
 	int value = 0;
 
 };
+
+struct Hand {
+
+	int sumCard = 0;
+	int aceCount = 0;
+
+};

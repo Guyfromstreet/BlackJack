@@ -8,14 +8,14 @@
 void errInput() {
 	std::cin.clear();
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-	std::cout << "Ошибка ввода\nПовторите ввод ещё раз";
+	std::cout << "Ошибка ввода\nНажмите  Enter для продолжения\n";
 	std::string dummy;
 	std::getline(std::cin, dummy);
 }
 
 void backToMenu() {
 	std::this_thread::sleep_for(std::chrono::milliseconds(500));
-	std::cout << "Для возвращения в меню нажмите Enter\n";
+	std::cout << "Для продолжения нажмите Enter\n";
 	std::cout << "Ожидание ввода...\n";
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	std::string dummy;

@@ -4,6 +4,21 @@
 #include "Deck.h"
 #include "Game.h"
 
+void addCard(Hand& hand, const Card& currentCard, int& cardIndex) {
+
+	hand.sumCard += currentCard.value;
+	cardIndex++;
+	if (currentCard.rank == "Туз") {
+		hand.aceCount++;
+	}
+	while (hand.aceCount > 0 && hand.sumCard > 21) {
+		hand.sumCard = hand.sumCard - 10;
+		hand.aceCount--;
+	}
+
+
+}
+
 void playGame(int& balance) {
 	//Переменные
 	int bet = 0;
@@ -13,6 +28,8 @@ void playGame(int& balance) {
 	int pickCard = 1; //1 - брать, 2 - пас
 	int aceCount = 0;
 	int aceCountDealer = 0;
+	Hand player (0, 0);
+	Hand dealer (0, 0);
 
 	std::string mes[] = {
 		"Вы проиграли",
@@ -51,33 +68,20 @@ void playGame(int& balance) {
 		currentCard = deck[cardIndex];
 		cardIndex++;
 		std::cout << currentCard.rank << " " << currentCard.suit << "\n" << currentCard.value << "\n\n";
-		sumCard += currentCard.value;;
-		if (currentCard.rank == "Туз") {
-			aceCount++;
-		}
-		while (aceCount > 0 && sumCard > 21) {
-			sumCard = sumCard - 10;
-			aceCount--;
-		}
+		void addCard(Hand& player, const Card& currentCard, int& cardIndex);
 
 		//Дилеру
 		currentCard = deck[cardIndex];
 		cardIndex++;
-		sumDealer += currentCard.value;
-		if (currentCard.rank == "Туз") {
-			aceCountDealer++;
-		}
-		while (aceCountDealer > 0 && sumDealer > 21) {
-			sumDealer = sumDealer - 10;
-			aceCountDealer--;
-		}
+		void addCard(Hand& dealer, const Card& currentCard, int& cardIndex);
+
 		if (i == 1) {
 			std::cout << "Карта Дилера: " << currentCard.rank << " " << currentCard.suit << "\n" << currentCard.value << "\n\n";
 		}
 	}
 
 	while (pickCard != 2 && sumCard < 21) {
-		std::cout << "Количество очков: " << sumCard << "\n";
+		std::cout << "Количество очков: " << player.sumCard << "\n";
 		std::cout << "Взять ещё одну?\n 1. Да \n 2. Нет \n Ввод: ";
 		std::cin >> pickCard;
 		if (std::cin.fail() || pickCard < 1 || pickCard > 2) {
@@ -91,49 +95,33 @@ void playGame(int& balance) {
 			std::cout << "\n---Получена карта---\n";
 			currentCard = deck[cardIndex];
 			std::cout << currentCard.rank << " " << currentCard.suit << "\n" << currentCard.value << "\n\n";
-			sumCard += currentCard.value;
-			cardIndex++;
-			if (currentCard.rank == "Туз") {
-				aceCount++;
-			}
-			while (aceCount > 0 && sumCard > 21) {
-				sumCard = sumCard - 10;
-				aceCount--;
-			}
+			void addCard(Hand& player, const Card& currentCard, int& cardIndex);
 		}
 
 	}
 	//Ход дилера
-	while (sumDealer < 17 && sumCard <= 21) {
+	while (dealer.sumCard < 17 && player.sumCard <= 21) {
 
 		currentCard = deck[cardIndex];
-		sumDealer += currentCard.value;
-		cardIndex++;
-		if (currentCard.rank == "Туз") {
-			aceCountDealer++;
-		}
-		while (aceCountDealer > 0 && sumDealer > 21) {
-			sumDealer = sumDealer - 10;
-			aceCountDealer--;
-		}
+		void addCard(Hand& dealer, const Card& currentCard, int& cardIndex);
 	}
 
 	std::cout << "═══════════════════════════\n\n";
 	// Исходы
 	int change = 0;   // на сколько изменится баланс: минус, ноль или плюс
 
-	if (sumCard > 21) {
+	if (player.sumCard > 21) {
 		std::cout << "У вас " << sumCard << " очков\nПеребор. Вы проиграли\n";
 		change = -bet;
 	}
-	else if (sumDealer > 21) {
+	else if (dealer.sumCard> 21) {
 		std::cout << "У дилера перебор. Вы выиграли\n";
 		change = bet;
 	}
 	else {
-		int state = (sumCard > sumDealer) - (sumDealer > sumCard) + 1;
+		int state = (player.sumCard > dealer.sumCard) - (dealer.sumCard > player.sumCard) + 1;
 		change = (state - 1) * bet;
-		std::cout << "Ваши очки: " << sumCard << ".\nОчки дилера: " << sumDealer << "\n";
+		std::cout << "Ваши очки: " << player.sumCard << ".\nОчки дилера: " << dealer.sumCard << "\n";
 		std::cout << mes[state] << "\n";
 	}
 
@@ -166,7 +154,7 @@ void bank(int& balance, int& debt, int& percent) {
 
 		std::cout << "Добро пожаловать в банк\n";
 		std::cout << "Баланс: " << balance << " | Долг: " << debt << " | Проценты: " << percent << "\n";
-		std::cout << "1. Взять кредит\n2. Отдать долг\n 3.Уйти\n";
+		std::cout << "1. Взять кредит\n2. Отдать долг\n3.Уйти\n";
 		std::cin >> choice;
 		switch (choice) {
 
