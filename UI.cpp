@@ -38,7 +38,7 @@ void showRules() {
 }
 
 void showAbout() {
-	std::cout << "\n\n\nВерсия: 0.01\n"
+	std::cout << "\n\n\nВерсия: 0.8\n"
 		"Разработчик:\n"
 		"Poststudios\n"
 		"При поддержке Guy_from_street prod.\n\n";

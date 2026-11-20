@@ -4,10 +4,9 @@
 #include "Deck.h"
 #include "Game.h"
 
-void addCard(Hand& hand, const Card& currentCard, int& cardIndex) {
+void addCard(Hand& hand, const Card& currentCard) {
 
 	hand.sumCard += currentCard.value;
-	cardIndex++;
 	if (currentCard.rank == "Туз") {
 		hand.aceCount++;
 	}
@@ -22,14 +21,10 @@ void addCard(Hand& hand, const Card& currentCard, int& cardIndex) {
 void playGame(int& balance) {
 	//Переменные
 	int bet = 0;
-	int sumDealer = 0;
-	int sumCard = 0;
 	int cardIndex = 0;
 	int pickCard = 1; //1 - брать, 2 - пас
-	int aceCount = 0;
-	int aceCountDealer = 0;
-	Hand player (0, 0);
-	Hand dealer (0, 0);
+	Hand player;
+	Hand dealer;
 
 	std::string mes[] = {
 		"Вы проиграли",
@@ -46,92 +41,97 @@ void playGame(int& balance) {
 
 	//Ставка
 	std::cout << "Ваш баланс: " << balance;
-	while (bet == 0) {
-
-		std::cout << "Введите свою ставку: ";
-		std::cin >> bet;
-		if (std::cin.fail() || bet > balance || bet < 1) {
-			errInput();
-			bet = 0;
-		}
-		else {
-			std::cout << "\nСтавка принята\n\n\n";
-		}
-	}
-
-	//Раздача
-	std::cout << "Раздача\n\n";
-
-	//Выдача первых карт
-	for (int i = 0; i < 2; i++) {
-		//Игроку
-		currentCard = deck[cardIndex];
-		cardIndex++;
-		std::cout << currentCard.rank << " " << currentCard.suit << "\n" << currentCard.value << "\n\n";
-		void addCard(Hand& player, const Card& currentCard, int& cardIndex);
-
-		//Дилеру
-		currentCard = deck[cardIndex];
-		cardIndex++;
-		void addCard(Hand& dealer, const Card& currentCard, int& cardIndex);
-
-		if (i == 1) {
-			std::cout << "Карта Дилера: " << currentCard.rank << " " << currentCard.suit << "\n" << currentCard.value << "\n\n";
-		}
-	}
-
-	while (pickCard != 2 && sumCard < 21) {
-		std::cout << "Количество очков: " << player.sumCard << "\n";
-		std::cout << "Взять ещё одну?\n 1. Да \n 2. Нет \n Ввод: ";
-		std::cin >> pickCard;
-		if (std::cin.fail() || pickCard < 1 || pickCard > 2) {
-			errInput();
-			std::cout << "\nВведите число от 1 до 2\n\n\n";
-			pickCard = 0;
-
-		}
-
-		if (pickCard == 1) {
-			std::cout << "\n---Получена карта---\n";
-			currentCard = deck[cardIndex];
-			std::cout << currentCard.rank << " " << currentCard.suit << "\n" << currentCard.value << "\n\n";
-			void addCard(Hand& player, const Card& currentCard, int& cardIndex);
-		}
-
-	}
-	//Ход дилера
-	while (dealer.sumCard < 17 && player.sumCard <= 21) {
-
-		currentCard = deck[cardIndex];
-		void addCard(Hand& dealer, const Card& currentCard, int& cardIndex);
-	}
-
-	std::cout << "═══════════════════════════\n\n";
-	// Исходы
-	int change = 0;   // на сколько изменится баланс: минус, ноль или плюс
-
-	if (player.sumCard > 21) {
-		std::cout << "У вас " << sumCard << " очков\nПеребор. Вы проиграли\n";
-		change = -bet;
-	}
-	else if (dealer.sumCard> 21) {
-		std::cout << "У дилера перебор. Вы выиграли\n";
-		change = bet;
+	if (balance == 0) {
+		std::cout << "\nУ вас нет денег\n";
+		backToMenu();
 	}
 	else {
-		int state = (player.sumCard > dealer.sumCard) - (dealer.sumCard > player.sumCard) + 1;
-		change = (state - 1) * bet;
-		std::cout << "Ваши очки: " << player.sumCard << ".\nОчки дилера: " << dealer.sumCard << "\n";
-		std::cout << mes[state] << "\n";
+		while (bet < 1) {
+
+			std::cout << "Введите свою ставку: ";
+			std::cin >> bet;
+			if (std::cin.fail() || bet > balance || bet < 1) {
+				errInput();
+				bet = 0;
+			}
+			else {
+				std::cout << "\nСтавка принята\n\n\n";
+			}
+		}
+
+		//Раздача
+		std::cout << "Раздача\n\n";
+
+		//Выдача первых карт
+		for (int i = 0; i < 2; i++) {
+			//Игроку
+			currentCard = deck[cardIndex];
+			cardIndex++;
+			std::cout << currentCard.rank << " " << currentCard.suit << "\n" << currentCard.value << "\n\n";
+			addCard(player, currentCard);
+
+			//Дилеру
+			currentCard = deck[cardIndex];
+			cardIndex++;
+			addCard(dealer, currentCard);
+
+			if (i == 1) {
+				std::cout << "Карта Дилера: " << currentCard.rank << " " << currentCard.suit << "\n" << currentCard.value << "\n\n";
+			}
+		}
+
+		while (pickCard != 2 && player.sumCard < 21) {
+			std::cout << "Количество очков: " << player.sumCard << "\n";
+			std::cout << "Взять ещё одну?\n 1. Да \n 2. Нет \n Ввод: ";
+			std::cin >> pickCard;
+			if (std::cin.fail() || pickCard < 1 || pickCard > 2) {
+				errInput();
+				std::cout << "\nВведите число от 1 до 2\n\n\n";
+				pickCard = 0;
+
+			}
+
+			if (pickCard == 1) {
+				std::cout << "\n---Получена карта---\n";
+				currentCard = deck[cardIndex];
+				std::cout << currentCard.rank << " " << currentCard.suit << "\n" << currentCard.value << "\n\n";
+				addCard(player, currentCard);
+			}
+
+		}
+		//Ход дилера
+		while (dealer.sumCard < 17 && player.sumCard <= 21) {
+
+			currentCard = deck[cardIndex];
+			addCard(dealer, currentCard);
+		}
+
+		std::cout << "═══════════════════════════\n\n";
+		// Исходы
+		int change = 0;   // на сколько изменится баланс: минус, ноль или плюс
+
+		if (player.sumCard > 21) {
+			std::cout << "У вас " << player.sumCard << " очков\nПеребор. Вы проиграли\n";
+			change = -bet;
+		}
+		else if (dealer.sumCard > 21) {
+			std::cout << "У дилера перебор. Вы выиграли\n";
+			change = bet;
+		}
+		else {
+			int state = (player.sumCard > dealer.sumCard) - (dealer.sumCard > player.sumCard) + 1;
+			change = (state - 1) * bet;
+			std::cout << "Ваши очки: " << player.sumCard << ".\nОчки дилера: " << dealer.sumCard << "\n";
+			std::cout << mes[state] << "\n";
+		}
+
+		balance += change;
+		std::cout << "Ваш баланс: " << balance << "\n";
+
+		backToMenu();
+
 	}
-
-	balance += change;
-	std::cout << "Ваш баланс: " << balance << "\n";
-
-	backToMenu();
-
 }
-
 
 void repay(int amount, int& debt, int& percent, int& balance) {
 
