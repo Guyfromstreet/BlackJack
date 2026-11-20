@@ -38,7 +38,7 @@ void showRules() {
 }
 
 void showAbout() {
-	std::cout << "\n\n\nВерсия: 0.8\n"
+	std::cout << "\n\n\nВерсия: 0.8.2\n"
 		"Разработчик:\n"
 		"Poststudios\n"
 		"При поддержке Guy_from_street prod.\n\n";
@@ -71,4 +71,12 @@ void Credits() {
 		"╚═══════════════════════════╝\n";
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
+}
+
+void printHand(const Hand& hand) {
+	std::cout << "Карты " << hand.name << "\n";
+	for (const Card& Card : hand.cards) {
+		std::cout << Card.rank << "\n" << Card.suit << "\n" << Card.value << "\n\n";
+	}
+	std::cout << "═══════════════════════════\n\n";
 }

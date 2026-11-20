@@ -1,11 +1,13 @@
 #include <iostream>
+#include <vector>
+#include <cmath>
 #include "UI.h"
 #include "Card.h"
 #include "Deck.h"
 #include "Game.h"
 
 void addCard(Hand& hand, const Card& currentCard) {
-
+	hand.cards.push_back(currentCard);
 	hand.sumCard += currentCard.value;
 	if (currentCard.rank == "Туз") {
 		hand.aceCount++;
@@ -23,8 +25,8 @@ void playGame(int& balance) {
 	int bet = 0;
 	int cardIndex = 0;
 	int pickCard = 1; //1 - брать, 2 - пас
-	Hand player;
-	Hand dealer;
+	Hand player{ "Игрок" };
+	Hand dealer{ "Дилер" };
 
 	std::string mes[] = {
 		"Вы проиграли",
@@ -113,8 +115,13 @@ void playGame(int& balance) {
 		std::cout << "═══════════════════════════\n\n";
 		// Исходы
 		int change = 0;   // на сколько изменится баланс: минус, ноль или плюс
-
-		if (player.sumCard > 21) {
+		printHand(player);
+		printHand(dealer);
+		if (player.cards.size() == 2 && player.sumCard == 21) {
+			std::cout << "У вас Блэкджек. Выигрыш 3 к 2\n";
+			change = bet * 3 / 2;
+		}
+		else if (player.sumCard > 21) {
 			std::cout << "У вас " << player.sumCard << " очков\nПеребор. Вы проиграли\n";
 			change = -bet;
 		}

@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <string>
-
+#include <vector>
 struct Card {
 
 	std::string suit;
@@ -10,7 +10,8 @@ struct Card {
 };
 
 struct Hand {
-
+	std::string name;
+	std::vector<Card> cards;
 	int sumCard = 0;
 	int aceCount = 0;
 
