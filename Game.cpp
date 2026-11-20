@@ -96,6 +96,8 @@ void playGame(int& balance) {
 				currentCard = deck[cardIndex];
 				std::cout << currentCard.rank << " " << currentCard.suit << "\n" << currentCard.value << "\n\n";
 				addCard(player, currentCard);
+				cardIndex++;
+
 			}
 
 		}
@@ -104,6 +106,8 @@ void playGame(int& balance) {
 
 			currentCard = deck[cardIndex];
 			addCard(dealer, currentCard);
+			cardIndex++;
+
 		}
 
 		std::cout << "═══════════════════════════\n\n";
